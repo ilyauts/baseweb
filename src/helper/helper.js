@@ -34,6 +34,7 @@ export function Helper(props: PropsT) {
   return (
     //$FlowFixMe
     <Popover
+      autoFocus={false}
       data-baseweb="helper"
       {...restProps}
       placement={placement}

@@ -8,7 +8,7 @@ LICENSE file in the root directory of this source tree.
 /* eslint-disable react/no-find-dom-node */
 /* eslint-disable cup/no-undef */
 import * as React from 'react';
-import FocusLock from 'react-focus-lock';
+import FocusLock, {MoveFocusInside} from 'react-focus-lock';
 
 import {getOverride, getOverrideProps} from '../helpers/overrides.js';
 import {
@@ -73,7 +73,6 @@ class PopoverInner extends React.Component<
     this.init(prevProps, prevState);
     if (
       this.props.autoFocus &&
-      this.props.focusLock &&
       !this.state.autoFocusAfterPositioning &&
       this.popperRef.current !== null &&
       this.popperRef.current.getBoundingClientRect().top > 0
@@ -476,9 +475,14 @@ class PopoverInner extends React.Component<
                 noFocusGuards={false}
                 // see popover-focus-loop.scenario.js for why hover cannot return focus
                 returnFocus={this.props.returnFocus && !this.isHoverTrigger()}
-                autoFocus={this.state.autoFocusAfterPositioning}
               >
-                {this.renderPopover(renderedContent)}
+                {this.state.autoFocusAfterPositioning ? (
+                  <MoveFocusInside>
+                    {this.renderPopover(renderedContent)}
+                  </MoveFocusInside>
+                ) : (
+                  this.renderPopover(renderedContent)
+                )}
               </FocusLock>
             </TetherBehavior>
           </Layer>,
